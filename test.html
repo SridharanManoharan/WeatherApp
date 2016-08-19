@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Weather Application</title>
+    <link rel="stylesheet" href="./public/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./style.css">
+    <script type="text/javascript" src="./public/javascripts/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="./public/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script type="text/javascript" src="./data_coverter.js"></script>
+    <script type="text/javascript" src="./plot_graph.js"></script>
+  </head>
+  <body>
+    <div class="container" id="appbase">
+      <div class="row">
+        <div class="col-sm-12" id="header">
+          <h1>Weather App</h1>
+          <svg width="960" height="500"></svg>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+  var json_data;
+  window.onload=function(){
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','http://api.ipify.org/?format=jsonp&callback=?');
+    xhr.send(null);
+    xhr.onreadystatechange=function () {
+      var DONE = 4; // readyState 4 means the request is done.
+      var OK = 200; // status 200 is a successful return.
+      if (xhr.readyState === DONE)
+      {
+        if (xhr.status === OK)
+        {
+          var json_string = xhr.responseText.slice(2, -2);
+          //console.log(json_string); // 'This is the returned text.'
+          json_data = JSON.parse(json_string);
+          console.log(json_data.ip);
+          if(navigator.geolocation)
+          {
+            navigator.geolocation.getCurrentPosition(getLocation);
+          }
+          else
+          {
+            console.log("browser does not support geolocation");
+          }
+
+        }
+      }
+      else
+      {
+          console.log('Error: ' + xhr.status); // An error occurred during the request.
+      }
+     }
+  }
+
+  function getLocation(position){
+      console.log(position.coords.latitude,position.coords.longitude);
+      var xhr_new = XMLHttpRequest();
+      var params = "latitude="+position.coords.latitude+"&longitude="+position.coords.longitude+"&ip="+json_data.ip;
+      xhr_new.open('GET','http://api.openweathermap.org/data/2.5/forecast/city?id=524901&APPID=bfbfccb0b8cb44018d9282c12bb57409', true);
+      xhr_new.send();
+      xhr_new.onreadystatechange = function(){
+        var DONE = 4;
+        var OK = 200;
+
+        if(xhr_new.readyState === DONE){
+          if(xhr_new.status === OK){
+            var temp_json=JSON.parse(xhr_new.responseText);
+            //console.log(JSON.parse(xhr_new.responseText));
+            console.log(temp_json.city.name);
+            console.log(temp_json.list.length);
+
+            rawtoactualdataconverter(temp_json)
+
+          }
+        }
+      }
+  }
+
+</script>
+</html>
