@@ -11,20 +11,26 @@ function populatedashboard(jsondata){
 
     btndivision.setAttribute("class","col-sm-11");
     spandivision.setAttribute("class","col-sm-1");
-    btndivision.style.padding = 0;
+
     spandivision.style.padding =0;
     spandivision.style.textAlign="center";
     spandivision.style.background="#909090";
 
     var btn = document.createElement('button');
+    var liDashboard = document.createElement('LI');
+    var aDashboard = document.createElement("A");
+    liDashboard.style.paddingLeft = "20px";
     var t = document.createTextNode(json_data[i].cityName);
-    btn.appendChild(t);
+    liDashboard.setAttribute("type", "button");
+    aDashboard.appendChild(t);
+    liDashboard.appendChild(aDashboard);
 
     //adding attributes to the button
-    btn.addEventListener("click",update_graph);
-    btn.setAttribute("data-lat",json_data[i].lat);
-    btn.setAttribute("data-lng",json_data[i].lng);
-    btndivision.appendChild(btn);
+    liDashboard.addEventListener("click",update_graph);
+    liDashboard.setAttribute("data-lat",json_data[i].lat);
+    liDashboard.setAttribute("data-lng",json_data[i].lng);
+    liDashboard.setAttribute("city-name",json_data[i].cityName);
+
 
     //creating new span for deleting the dashboard
     var newspan = document.createElement('span');
@@ -35,11 +41,11 @@ function populatedashboard(jsondata){
     newspan.style.paddingTop="5px";
     spandivision.appendChild(newspan);
 
-    newdivision.appendChild(btndivision);
-    newdivision.appendChild(spandivision);
+    // newdivision.appendChild(liDashboard );
+    // newdivision.appendChild(spandivision);
 
     var element = document.getElementById('side-menu');
-    element.appendChild(newdivision);
+    element.appendChild(liDashboard);
   }
 }
 
@@ -58,6 +64,8 @@ function update_graph(){
   //console.log("this function is getting called when the buttons are called",this);
   var lat = this.getAttribute("data-lat");
   var lng = this.getAttribute("data-lng");
+  localStorage.cityName = this.getAttribute("city-name");
+  document.getElementById('CityName').innerHTML = localStorage.cityName;
   var url = 'http://api.openweathermap.org/data/2.5/forecast/city?'+"lat=" + lat + "&" + "lon=" + lng +'&APPID=bfbfccb0b8cb44018d9282c12bb57409';
   xmlhttprequestfunction(url,rawtoactualdataconverter);
 }
@@ -65,7 +73,7 @@ function update_graph(){
 function deletedash(){
   //console.log("deletedash",this);
   var url="http://localhost:3000/deletedash";
-  $.post(url,{ip:this.getAttribute("ip"),cityName:this.getAttribute("cityName")}, function(data){
+  $.post(url,{ip:localStorage.ip,cityName:localStorage.cityName}, function(data){
       alert(data);
       location.reload();
   });
