@@ -10,6 +10,14 @@ body {
   margin-bottom: 0;
 }
 
+.subSide{
+  padding: 0px 0px 0px 20px;
+}
+
+.subSide>li{
+  float: right;
+}
+
 #page-wrapper {
     padding: 0 15px;
     min-height: 568px;
@@ -27,12 +35,21 @@ body {
 
 .sidebar ul li {
     border-bottom: 1px solid #e7e7e7;
+    display: block;
 }
 
 .sidebar ul li a.active {
     background-color: #eee;
 }
 
+.sidebar ul div li {
+    border-bottom: 1px solid #e7e7e7;
+    display: block;
+}
+
+.sidebar ul div li a.active {
+    background-color: #eee;
+}
 
 @media(min-width:768px) {
     .sidebar {

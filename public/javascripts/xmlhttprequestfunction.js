@@ -10,8 +10,9 @@ function xmlhttprequestfunction(url,callback){
     {
       if (xhr.status === OK)
       {
-        //console.log(xhr.responseText);
+        //console.log(xhr.responseText);        
         callback(xhr.responseText);
+
       }
     }
     else

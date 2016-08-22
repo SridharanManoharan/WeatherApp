@@ -3,6 +3,7 @@
 function plot_graph(data){
     d3.select("svg").html("");
 
+console.log(localStorage);
     var margin = {top: 20, right: 40, bottom: 60, left: 50},
     width = 960 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
